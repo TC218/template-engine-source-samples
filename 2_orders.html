@@ -1,0 +1,131 @@
+[include file='../includes/table.html'/]
+
+[exec]
+  var num_cols = 13;    
+  var view_date = 'date:string';
+
+  var fields = 
+  {
+    time: {},
+    delivery_time: {},
+    driver_id: { type: 'select' }
+  }
+    
+  if (allow_edit_clients) {
+    fields.client_id = { type: 'select' };
+  }
+  
+  
+  fields = Main.inst.models.get('Orders').populateFormFieldDefs(fields);
+  
+[/exec]
+
+
+[macro name='cellValue']
+  [call macro='cellValBase' _params='{!params!}']  
+    [if: key == 'client_id']
+      <span>{!params.item.client_phone!}<br/>{!params.item.client_name!}</span>
+    [elseif: key == 'driver_id']
+      <span>{! exists('drivers') && drivers.exists(val) ? drivers.get(val).name : '' !}</span>
+    [/elseif]
+    [elseif: key == 'branch_id']
+      <span>{! exists('branches') && branches.exists(val) ? branches.get(val).name : '' !}</span>
+    [/elseif]
+    [else]
+      <span>{!val!}</span>
+    [/if]
+  [/call]
+[/macro]
+
+
+[macro name='listItems']  
+  [call macro='listItemsBase' _params='{!params!}']
+    {! cellVal(item, 'id') !}
+    {! cellVal(item, 'time') !}
+    {! cellVal(item, 'delivery_time') !}
+    {! cellVal(item, 'driver_id') !}
+    {! cellVal(item, null, null,  ' class="d"') !}
+    {! cellVal(item, 'address', null,  ' class="d"') !}
+    {! cellVal(item, null, null, ' class="d"') !}
+    {! cellVal(item, null, null, ' class="d"') !}
+    {! cellVal(item, 'client_id', !allow_edit_clients ? ' class="d"' : '') !}
+    {! cellVal(item, null, null, ' class="d"') !}
+    {! cellVal(item, null, null, ' class="d"') !}
+    {! cellVal(item, null, null, ' class="d"') !}
+    {! cellVal(item, 'branch_id', null, ' class="d"') !}
+  [/call]
+[/macro]  
+      
+[macro name='itemPopover']
+  <div class='item'>
+    [if: params.item.flags.indexOf('canceled') >= 0]
+      <div class='canceled'><span class='color-box'/> <span>Anulēts pasūtījums</span> </div>
+    [elseif: params.item.flags.indexOf('modified') >= 0]
+      <div class='modified'><span class='color-box'/> <span>Mainīts pasūtījums</span> </div>      
+    [/elseif]
+    [else]
+      <div class='normal'><span class='color-box'/> <span>Nemainīts pasūtījums</span> </div>    
+    [/if]  
+  </div>
+[/macro]
+      
+
+[call macro='header']
+  <div>
+    <h3>{!title!}:</h3>
+    <button class="btn btn-success" id="add-test">Tests: +10 pasūtījumi</button> 
+    &nbsp;
+    
+    [form tag_id='filter-form' _class='filter' _data-on_enter_submit='true']
+      <strong>Atlase:</strong> &nbsp;
+      <span class='field'>Datums no: [date name='start_date' default_time='00:00' /]</span>
+      <span class='field'>Līdz: [date name='end_date' default_time='23:59:59' /]</span>
+      <span class='field'>Telefons: [text name='phone' options='{! { filters: { type: "phone", min_len: null } } !}'/]</span>
+
+      [@]<span class='field'>[color name='c'/]</span>[/@]
+      
+      <input class="btn btn-default" type="submit" value="Meklēt">
+    [/form]
+        
+  </div>
+  <div class='r'>
+    [call macro='selectStatusContainer'/]    
+  </div>  
+  
+[/call]        
+
+
+[call macro='contentTable']
+  [call macro='columnsLabels']
+    <th style="width:120px">Pasūtījuma laiks</th>
+    <th style="width:120px">Piegādes laiks</th>
+    <th style="width:10%">Braucējs</th>
+    <th class="d">Veids</th>
+    <th class="d">Adrese</th>
+    <th class="d">Kopējā cena</th>
+    <th class="d">Iepirkumu grozs</th>
+    <th[if: fields.client_id == null] class="d"[/if]>Klients</th>
+    <th class="d">Pasūtījuma reize</th>
+    <th class="d">Atlaide %</th>
+    <th class="d">Pasūtīts uz</th>
+    <th class="d">Filiāle</th>      
+  [/call]
+  
+  [call macro='columnsDefinitions']
+    {! colField('id', null, { inner_html: '<span>&nbsp;</span>' }) !}
+    {! colField('time', fields.time) !}
+    {! colField('delivery_time', fields.delivery_time) !}
+    {! colField('driver_id', fields.driver_id) !}
+    {! colField() !}
+    {! colField('address') !}
+    {! colField() !}
+    {! colField() !}
+    {! colField('client_id', fields.client_id) !}
+    {! colField() !}
+    {! colField() !}
+    {! colField() !}
+    {! colField('branch_id') !}    
+  [/call]
+  
+[/call]
+

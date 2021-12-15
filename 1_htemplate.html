@@ -1,0 +1,136 @@
+[html]
+[head] 	  
+  [viewport/]
+  [favicon/]
+    
+  [@][asset alias="jquery.js" target="lib/jquery-1.1.0.js" /][/@]
+  
+  [js url="jquery.js"/]
+    
+  [scripts/]
+  
+[/head]
+<body>
+   
+  {!@ a = 4; b = 8; !}
+  
+  [exec] a = 35; [/exec]
+  
+  [css] 
+    .a { color: red; {!a!} }     
+  [/css]
+ 
+  [for: x in 0...5]
+    {!x!}
+  [/for]
+  
+  [if: 1 == 1]
+    some1
+        
+    [elseif: a == b] other [/elseif]
+    [elseif: false] other2 [/elseif]
+    [else] other3 [/else] 
+  [/if]
+  
+  [switch: a]
+    [case: 5] abcase [/case]
+    [case: 6] cdcase [/case]
+    [default] default [/default]
+  [/switch]
+  
+  {!@
+      
+    for (x in 0...10)
+    {
+      print(x+'\n');
+    }
+    
+  !}
+  
+  
+  dsadsa {!    someval    !}
+  
+  {!(1 == 1) == true!}
+  
+  [date value="{! xxx = 1234000 !}"/]
+  {!xxx!}
+
+  [view] 
+  abvcv
+    {!someval = 555777!}
+    <strong>TEST {!someval!}</strong>
+    [block]
+      mytest!
+      [view]testview[/view]
+    [/block]
+  [/view]
+
+
+  [block]
+    test! {!someval!}
+    [date value="{!20239000 + 10000!}"/]
+    
+    [view]
+      {!someval = 789!}
+      <strong>TEST {!someval!}</strong>
+    [/view]
+  
+    _/test_
+  [/block]
+  
+  [form]
+    my form!
+    
+    [view] MY [form]SUPER[/form] VIEW 2![/view]
+    
+    [form]
+      [input][form]another {!someval!}{!someval!}{!someval!}  {!myval = 555!} [/form][@]{!myval!}[/@][/input]
+      [@]{!myval!}[/@]
+    [/form]
+    
+    [@]{!myval!}[/@]
+    /_form!
+    
+  [/form]
+  [@]{!myval!}[/@]
+  
+  {!someval!}
+
+  
+[var: v2]
+  Zxc
+[/var]
+
+
+{!v2!}
+
+[filter type='string.upperCase']f abc[/filter]
+[filter type='string.upperCase' val='{!v2!}'/]
+
+[filter type='string.lowerCase']
+  [filter type='string.upperCase' val='{!v2!}'/]
+[/filter]  
+
+[filter type='string.indent' spaces=2]
+abc
+[/filter]
+
+[var: v3]
+  def2  ab2
+[/var]
+
+[filter type='string.condenseSpace']
+  {!v3!}
+[/filter]
+
+[filter type='string.trim']
+  {!v3!}
+[/filter]
+
+[filter type='string.stripSpaces']
+  {!v3!}
+[/filter]
+
+  
+</body>
+[/html]

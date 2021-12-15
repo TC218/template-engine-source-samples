@@ -1,0 +1,370 @@
+[include file='base.html'/]
+
+[exec]
+  var col_view_filters = new StringMap();
+  
+  function getNumCols()
+  {
+    var cols = num_cols;
+    if (macroExists('rowsPanel')) cols++;
+    
+    return cols;
+  }
+  
+[/exec]
+
+[macro name='selectStatus']
+  <span>
+    [if: item_is_female]
+      Iezīmēt[if: params.n == 1]a[else]as[/if]
+      <strong>{!params.n!}</strong> [if: params.n == 1]{!item_name!}[else]{!item_name_multiple!}[/if]:
+    [else]  
+      Iezīmēt[if: params.n == 1]s[else]i[/if]
+      <strong>{!params.n!}</strong> [if: params.n == 1]{!item_name!}[else]{!item_name_multiple!}[/if]:
+    [/if]
+  </span>
+    
+  [if: has_sort_index && n == 1]
+    <span>
+      <button class="btn btn-default action-up"><span class="glyphicon glyphicon-arrow-up"></span> Uz augšu</button>       
+      <button class="btn btn-default action-down"><span class="glyphicon glyphicon-arrow-down"></span> Uz leju</button>           
+    </span>
+  [/if]
+  
+  <span>
+    <button class="btn btn-danger action-delete">Dzēst 
+      [if: n == 1]to
+        [elseif: item_is_female]tās[/elseif]
+        [else]tos
+      [/if]
+    </button>       
+    <button class="btn btn-default action-clear">Noņemt iezīmi</button>       
+  </span>
+[/macro]
+
+
+
+
+[macro name='header']
+  [macro name='selectStatusContainer']
+    <div id='select-status-{!_app_object.tree_object.id!}' class='select-status' style='display:none'></div>
+  [/macro]
+    
+  <div class='header-wrap' id="header-wrap-{!_app_object.tree_object.id!}">
+    <div class='bg'></div>
+    <div class="header[if: !params.in_table] not-in-table[/if]">
+      {!params._call_inner!}
+    </div>    
+  </div>      
+[/macro]
+
+
+[macro name='cellValBase']
+  {!@
+    var p = params;
+    
+    if (p.attribs == null && p.field != null && p.field.type == 'checkbox') {
+      p.attribs = 'class="checkbox-td"';
+    }
+    else if (p.attribs == null && p.key == 'id') {
+      p.attribs = 'class="id d"';
+    }
+  !}
+  
+  [if: !params.skip_td]<td {!p.attribs->noesc!}>[/if]
+  
+  {!@ 
+    var val = Ref.field(fields, key);
+    var flt = null;
+    
+    if (!has_error && val != null)
+    {
+      if (params.flt != null && col_view_filters.exists(params.flt)) 
+      {
+//        log(['f', params.flt, col_view_filters.exists(params.flt) ]);
+        flt = set('flt', col_view_filters.get(params.flt));      
+        set('val', flt.process(val));          
+      }
+      else if (col_view_filters.exists(key)) 
+      {
+        flt = set('flt', col_view_filters.get(key));      
+        set('val', flt.process(val));          
+      }
+    }
+    
+  !}    
+    
+  <div class='bg'></div><div class='bg2'></div>
+
+
+  [if: p.field != null && p.field.type == 'checkbox']
+    <input type='checkbox' name='{!key!}' [if: val] checked='checked'[/if] />
+  [elseif: flt != null && flt.hasFilter('color:string')]
+    <span class='color-field cell-inner'><span class='color-label'>{!val!}</span><div class='color-box' style='background-color:{!val!}'/></span>
+  [/elseif]
+  [elseif: _call_inner]
+    {!_call_inner!}
+  [/elseif]
+  [else]
+    <span>{!val!}</span>
+  [/if]          
+    
+  [if: !params.skip_td]</td>[/if]
+[/macro]
+
+[exec]
+  function cellVal(item, key, ?field, ?attribs, ?fields)
+  {
+    callMacro('cellValue', {
+      fields: (item.errors != null) ? item.dirty_fields : (fields != null ? fields : item.fields),
+      item: item,
+      key: key,
+      field: field,
+      attribs: attribs,
+      has_error: (item.errors != null)        
+    });
+  }    
+
+  function cellValFlt(item, key, flt)
+  {
+    callMacro('cellValue', {
+      fields: (item.errors != null) ? item.dirty_fields : item.fields,
+      item: item,
+      flt: flt,
+      key: key,
+      has_error: (item.errors != null)        
+    });
+  }    
+
+[/exec]
+
+[macro name='listItemsBase']
+  [exec]
+    var has_rows_panel = macroExists('rowsPanel');
+  [/exec]
+
+  [for: item in params.items]
+    <tr data-id='{!item.fields.id!}'>
+      {!params._call_inner!}      
+      [if: has_rows_panel]<td class='rp'></td>[/if]
+    </tr>
+  [/for]    
+[/macro]
+
+
+[macro name='contentTable']
+
+  [exec]
+  
+    function colField(?name, ?field, ?options)
+    {
+      if (name != null && !Std.is(name, String))
+      {
+        field = name;
+        name = field.name;
+      }
+      
+      if (field == false) field = null;
+      
+      if (field != null) 
+      {
+        field = DS.copyFields(field);
+        field.hidden_errors = true;
+      }
+      
+      if (options != null && options.view_only)  
+      {
+        options.view_filters = field.view_filters;
+        field = null;
+      }
+      
+      var filters = null;
+      
+      if (options != null && options.view_filters != null) {
+        filters = createFilters(options.view_filters);
+      }
+      else if (field != null && field.view_filters != null) {
+        filters = createFilters(field.view_filters);
+      }
+      
+      if (filters != null) {
+        //trace(name);
+        //var ab = 'gfgfd';
+        //var ab = 123;
+        //log(\['setf', ab]);
+        //log(name);
+        col_view_filters.set(name, filters);
+      }
+            
+      callMacro('colField', {
+        name: name,
+        field: field,
+        options: options
+      });
+    }
+    
+    
+    num_cols = getNumCols();
+
+  [/exec]
+  
+  [macro name='colField']
+    <td[if: params.field == null] class="noedit"[/if][if: params.name] data-name="{!params.name!}"[/if]
+      [if: params.options != null && params.options.keep_content]data-keep_content="true"[/if]
+      >                        
+      
+      [if: params.options != null && params.options.inner_html != null]
+        {!params.options.inner_html->noesc!}
+      [elseif: params.field != null]
+        <div class='bg'></div>                        
+        {!@           
+          var f = params.field;
+          var type = (f.type != null) ? f.type : 'text';
+          
+          var name = f.name;    
+          var multiple = false;
+          var map_id = null;
+          var array_el_id = null;
+/*          
+          var dot_pos = name.indexOf('.');
+          if (dot_pos >= 0 && dot_pos < name.length-1)
+          {
+            set('name', name.substr(0, dot_pos));
+
+            var k = f.name.substr(dot_pos+1);
+            if (k.charAt(0) != '.')
+            {
+              set('multiple', 'map');
+              set('map_id', k);
+            }
+            else 
+            {
+              set('multiple', true);
+              set('array_el_id', k.substr(1));
+            }
+          }
+*/
+          
+        !}
+        
+        [switch: type]
+          [case: 'date']
+            [date name="{!name!}" multiple="{!multiple!}" map_id="{!map_id!}"
+              options='{!f!}' _class='tfield' default_time='08:00' _data-on_enter_focus_next="false" 
+            /]                  
+          [/case]
+          
+          [case: 'select']
+            [select 
+              name="{!name!}" multiple="{!multiple!}" map_id="{!map_id!}"
+              options='{!f!}' 
+              _class='form-control' 
+              _data-live-search="{! Std.is(f.live_search, Bool) ? f.live_search : true !}" 
+              _data-on_enter_focus_next="false" 
+            /]        
+          [/case]
+          
+          [default]
+            [field 
+              type='{!type!}' 
+              name="{!name!}" multiple="{!multiple!}" map_id="{!map_id!}"
+              options='{!field!}' 
+              _class='tfield' 
+              _data-on_enter_focus_next="false" 
+              wrap-attribs='{![ "class" => "cell-inner" ]!}' 
+            /]        
+          [/default]
+        [/switch]
+        
+        <div class='overlay'></div>        
+      [/if]
+    </td>
+  [/macro]    
+
+  [macro name='columnsLabels']
+    <thead>    
+      <tr>
+        <th class="v-middle d" style="width:4%">ID</th>
+        {!_call_inner!}
+        [if: macroExists('rowsPanel')]<th class="rows-panel-th" title="Atvērt paneli (F2)"></th>[/if]          
+      </tr>    
+    </thead>
+  [/macro]
+  
+  [macro name='columnsDefinitions']
+    [form tag_id='table-form' without_html_tag='{!true!}']
+      <tbody class='hidden edit-fields'>
+        <tr>
+          {!params._call_inner!}          
+          [if: macroExists('rowsPanel')]<td><div class="panel-toggle" title="Slēgāt paneli (F2)"><i class="fa fa-angle-double-down fa-2x"></i></div></td>[/if]          
+        </tr>
+      </tbody>
+    [/form]  
+  [/macro]
+
+  <div class="content etable-wrap [if: num_parent_tableviews > 0]scrollable[/if]">  
+    
+    <table class="table table-condensed table-striped table-bordered edit" id="etable-{!_app_object.tree_object.id!}">
+      {!params._call_inner!}
+      
+      <tbody class="items-container"></tbody>
+      
+      <tbody class="more-items">
+        <tr>
+          <td colspan='{!num_cols!}' class='empty full-width'>
+            <div class='bg'></div>
+            <div>
+               <i class='fa fa-pulse fa-3x fa-spinner' style='visibility:hidden' />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      
+      <tbody class="no-records">
+        <tr>
+          <td colspan='{!num_cols!}' class='empty full-width'>
+            <div class='bg'></div>
+            <div>&laquo; Nav ierakstu &raquo;</div>
+          </td>
+        </tr>
+      </tbody>
+
+      <tbody class="end-of-table">
+        <tr>
+          <td colspan='{!num_cols!}' class='empty full-width'>
+            <div class='bg'></div>
+            <div>&laquo; Saraksta gals &raquo;</div>
+          </td>
+        </tr>
+      </tbody>
+
+      <tbody class="nothing-found">
+        <tr>
+          <td colspan='{!num_cols!}' class='empty full-width'>
+            <div class='bg'></div>
+            <div>&laquo; Nekas nav atrasts! &raquo;</div>
+          </td>
+        </tr>
+      </tbody>
+
+      [if: macroExists('rowsPanel')]
+        <tbody class="rows-panel">
+          <tr class="panel-tr">
+            <td colspan='{!num_cols!}' class='panel full-width'>
+              [call macro='rowsPanel'/]
+            </td>
+          </tr>
+        </tbody>
+      [/if]
+
+    </table>
+      
+    [@][if: macroExists('rowsPanel')]
+      <div class="panel-open"><i class="fa fa-caret-down fa-3x"></i></div>    
+    [/if][/@]
+    
+  </div>
+  
+[/macro]
+
+

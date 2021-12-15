@@ -1,0 +1,131 @@
+[include file='includes/table.html'/]
+
+[exec]
+  var num_cols = 13;
+  var fields = null;    
+[/exec]
+
+
+[macro name='cellValue']
+  [call macro='cellValBase' _params='{!params!}'/]  
+[/macro]
+
+
+[macro name='listItems']  
+  [call macro='listItemsBase' _params='{!params!}']
+    {! cellVal(item, 'id') !}
+    {! cellVal(item, 'name') !}
+    
+    {! cellVal(item, 'price_small') !}
+    {! cellVal(item, 'price_small_emply') !}
+    {! cellVal(item, 'price_small_card') !}
+    {! cellVal(item, 'price_small_onplace') !}
+    
+    {! cellVal(item, 'price_large') !}
+    {! cellVal(item, 'price_large_emply') !}
+    {! cellVal(item, 'price_large_card') !}
+    {! cellVal(item, 'price_large_onplace') !}
+
+    {! cellVal(item, 'show', fields.show) !}
+    {! cellVal(item, 'code_small') !}
+    {! cellVal(item, 'code_large') !}    
+  [/call]
+[/macro]  
+
+              
+[call macro='header']
+  <div>    
+    <h3>{!title!}:</h3>  
+    <button class="btn btn-success add">Ievadīt picu &raquo;</button>       
+    <button class="btn btn-warning hide-form" style="display:none">&laquo; Slēpt formu</button>       
+        
+  </div>
+  <div class='r'>   
+    {!@ 
+      var status_container = callMacro("selectStatusContainer", null, true) 
+    !}      
+    [view class='view.AddPizzaView']
+      [include file="includes/form.html" /]
+      
+      {!@ setExternal('fields', fields); !}
+      
+      [call macro='defaultForm' style='display:none' right_bottom_field='{! status_container->noesc !}']
+        {! fld('name') !}
+        
+        {! prices(fields.price_small_label.label, [
+            fields.price_small,
+            fields.price_small_emply,
+            fields.price_small_card,
+            fields.price_small_onplace          
+          ]) 
+        !}
+
+        {! prices(fields.price_large_label.label, [
+            fields.price_large,
+            fields.price_large_emply,
+            fields.price_large_card,
+            fields.price_large_onplace          
+          ]) 
+        !}
+        
+        {! fieldsGroup(fields.code_label.label, [
+            fields.code_small,
+            fields.code_large
+          ])
+        !}
+        
+        {! fld('show') !}        
+      [/call]
+      
+    [/view]
+            
+  </div>  
+[/call]
+
+
+[call macro='contentTable']
+  <thead>        
+    <tr>
+      <th rowspan="2" class="v-middle d" style="width:4%">ID</th>
+      <th rowspan="2" class="v-middle" style="width:15%">{! fLabel(fields.name) !}</th>
+      <th colspan="4" class="center" style="width:30%">{! fLabel(fields.price_small_label) !}</th>
+      <th colspan="4" class="center" style="width:30%">{! fLabel(fields.price_large_label) !}</th>
+      <th rowspan="2" class="v-middle" style="width:5%">{! fLabel(fields.show) !}</th>
+      <th rowspan="2" class="v-middle">{! fLabel(fields.code_small) !}</th>
+      <th rowspan="2" class="v-middle">{! fLabel(fields.code_large) !}</th>
+    </tr>
+    
+    <tr class="subhead">    
+      <th>{! fShortLabel(fields.price_small) !}</th>
+      <th>{! fShortLabel(fields.price_small_emply) !}</th>
+      <th>{! fShortLabel(fields.price_small_card) !}</th>
+      <th>{! fShortLabel(fields.price_small_onplace) !}</th>
+
+      <th>{! fShortLabel(fields.price_large) !}</th>
+      <th>{! fShortLabel(fields.price_large_emply) !}</th>
+      <th>{! fShortLabel(fields.price_large_card) !}</th>
+      <th>{! fShortLabel(fields.price_large_onplace) !}</th>
+    </tr>
+  </thead>
+  
+  [call macro='columnsDefinitions']
+    {! colField('id', null, { inner_html: '<span>&nbsp;</span>' }) !}
+    {! colField('name', fields.name) !}
+
+    {! colField('price_small', fields.price_small) !}
+    {! colField('price_small_emply', fields.price_small_emply) !}
+    {! colField('price_small_card', fields.price_small_card) !}
+    {! colField('price_small_onplace', fields.price_small_onplace) !}
+
+    {! colField('price_large', fields.price_large) !}
+    {! colField('price_large_emply', fields.price_large_emply) !}
+    {! colField('price_large_card', fields.price_large_card) !}
+    {! colField('price_large_onplace', fields.price_large_onplace) !}
+    
+    {! colField('show', null, { keep_content: true }) !}
+    {! colField('code_small', fields.code_small) !}
+    {! colField('code_large', fields.code_large) !}
+  [/call]
+  
+[/call]
+

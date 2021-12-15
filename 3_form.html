@@ -1,0 +1,193 @@
+[include file='base.html'/]
+
+
+[macro name='field']
+  {!@   
+    var f = params.field;
+    var id = 'f-' + f.name;
+    var type = (f.type != null) ? f.type : 'text';
+    
+    var name = f.name;    
+    var multiple = false;
+    var map_id = null;
+    var array_el_id = null;
+    
+/*    
+    var dot_pos = name.indexOf('.');
+    if (dot_pos >= 0 && dot_pos < name.length-1)
+    {
+      set('name', name.substr(0, dot_pos));
+
+      var k = f.name.substr(dot_pos+1);
+      if (k.charAt(0) != '.')
+      {
+        set('multiple', 'map');
+        set('map_id', k);
+      }
+      else 
+      {
+        set('multiple', true);
+        set('array_el_id', k.substr(1));
+      }
+    }
+    */
+    
+  !}
+  
+  {!@ //log(['chk', name, multiple, map_id]) !} 
+  
+  [macro name='markRequired'][if: field.required] <strong style="font-size:larger">*</strong>[/if][if: !_params.no_colon]:[/if][/macro]
+    
+  [switch: type]
+    [case: 'checkbox'] 
+      <div class="form-group[@] form-group2[/@]">
+        <div class="col-sm-offset-2 col-sm-10">
+          <div class="checkbox">
+            <label class="allow-focus">                            
+              [call macro='inner' _return_vars='{! "_app_object" !}']
+                [checkbox _id="{!id!}" name="{!name!}" multiple="{!multiple!}" array_val="{!array_el_id!}" options="{!f!}" /] {!f.label!}
+              [/call]
+              
+              {!_call_result._content->noesc!}[call macro='markRequired' field='{!_call_result._app_object!}' no_colon='{!true!}'/]              
+            </label>
+          </div>
+        </div>
+      </div>
+    [/case]
+    
+    [case: 'select']
+      <div class="form-group form-group-sm">
+        [call macro='inner' _return_vars='{! "_app_object" !}']          
+          [select 
+            name="{!name!}" multiple="{!multiple!}" map_id="{!map_id!}"
+            bs-width="auto" 
+            options="{!f!}" 
+            _class="form-control" 
+            _id="{!id!}" 
+            _placeholder="{!f.label!}" 
+            _data-live-search="{! Std.is(f.live_search, Bool) ? f.live_search : true !}" 
+          /]
+        [/call]
+        
+        <label for="{!id!}" class="col-sm-2 control-label">{!f.label!}[call macro='markRequired' field='{!_call_result._app_object!}'/]</label>
+        <div class="col-sm-10">
+          {!_call_result._content->noesc!}
+        </div>
+      </div>        
+    [/case]
+    
+    [default]
+      {!@ var is_number = (type == 'text') && (fdefHasFilter(f.filters, 'int') || fdefHasFilter(f.filters, 'uint') || fdefHasFilter(f.filters, 'float')) !}
+
+      <div class="form-group form-group-sm">
+        [call macro='inner' _return_vars='{! "_app_object" !}']                  
+          [field 
+            type="{!type!}" 
+            _class="form-control{! is_number ? ' number' : '' !}" 
+            _id="{!id!}" _placeholder="{!f.label!}" 
+            name="{!name!}" multiple="{!multiple!}" map_id="{!map_id!}" 
+            options="{!f!}" 
+          /]
+        [/call]
+        
+        <label for="{!id!}" class="col-sm-2 control-label">{!f.label!}[call macro='markRequired' field='{!_call_result._app_object!}'/]</label>
+        <div class="col-sm-10">
+          {!_call_result._content->noesc!}
+        </div>
+      </div>    
+    [/default]
+  [/switch]
+
+[/macro]
+
+[macro name='fieldsGroup']
+  {!@
+    var sf = params.subfields;
+    var opt = (params.options != null) ? params.options : {};
+    var col_sz = Math.ceil(12 / sf.length);
+  !}
+  <div class="form-group form-group-sm">
+    <label class="col-sm-2 control-label prices4-label">{!params.label!}:</label>
+    <div class="col-sm-10">
+      
+      <div class="form-inline">
+        <div class="form-group">
+          <div class="row">
+            [for: f in sf]
+              <label for="f-{!f.name!}" class="col-md-{!col_sz!} control-label">{!f.label!}:</label>            
+            [/for]
+          </div>
+
+          <div class="row">
+            [for: f in sf]
+              <div class="col-md-{!col_sz!}">
+                <div class="input-group" style="width:100px">
+                  [if: opt.use_prices]<div class="input-group-addon">&euro;</div>[/if]
+                  [text _class="form-control" _id="f-{!f.name!}" name="{!f.name!}" options="{!f!}" /]                    
+                </div>                  
+              </div>
+            [/for]            
+          </div>
+          
+        </div>
+      </div>
+        
+    </div>
+  </div>    
+[/macro]
+
+[macro name='defaultForm']
+  <div class="form" style="{!params.style->noesc!}">
+    [form _class="form-horizontal" tag_id='{! has("tag_id") ? tag_id : "default-form" !}' keep_open='{!params.keep_open!}']
+    
+      {!params._call_inner!}
+
+      <div class='flex'>
+        <div class='col-sm-offset-2'></div>
+        
+        <div> 
+          <div class="form-group form-group-sm form-group-submit">
+            <div class="col-sm-10">
+              <button type="submit" class="btn btn-primary">{!_app_object.tag_id == 'edit-form' ? 'Saglabāt' : 'Ielikt bāzē' !} &raquo;</button>
+            </div>
+          </div>          
+
+        </div>
+
+        <div class='fill form-bottom-right'>{!params.right_bottom_field->noesc!}</div>
+      </div>
+
+      
+    [/form]    
+
+  </div>
+[/macro]
+
+
+[exec]
+  function fld(name)
+  {
+    callMacro('field', { field: Reflect.field(fields, name) });
+  }
+  
+  
+  function fieldsGroup(label, subfields)
+  {
+    callMacro('fieldsGroup', { 
+      label: label,
+      subfields: subfields
+    });
+  }
+  
+  
+  function prices(label, subfields)
+  {
+    callMacro('fieldsGroup', { 
+      label: label,
+      subfields: subfields,
+      options: { use_prices: true }
+    });
+  }
+    
+[/exec]
+

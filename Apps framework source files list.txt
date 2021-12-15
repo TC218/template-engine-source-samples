@@ -1,0 +1,224 @@
+
+apps library:
+
+├── [4.7K]  Imports.hx
+├── [ 56K]  base
+│   ├── [ 14K]  AppBase.hx
+│   ├── [8.5K]  AppObject.hx
+│   ├── [4.5K]  AssetPointer.hx
+│   ├── [1.4K]  ModuleClassX.hx
+│   ├── [ 319]  ModuleConfig.hx
+│   ├── [ 124]  ModuleHtmlViewInterface.hx
+│   ├── [4.4K]  ModulesAPI.hx
+│   ├── [ 424]  ModulesWrapper.hx
+│   ├── [ 139]  PackagesConfig.hx
+│   ├── [3.8K]  ServerBase.hx
+│   ├── [6.8K]  SharedBase.hx
+│   ├── [5.8K]  client
+│   │   ├── [1.1K]  AppObject.hx
+│   │   └── [4.6K]  ServerGateway.hx
+│   ├── [ 268]  import.hx
+│   └── [5.6K]  server
+│       └── [5.5K]  ClientGateway.hx
+├── [5.6K]  browser
+│   ├── [ 754]  JQuery.hx
+│   └── [4.8K]  KeyCode.hx
+├── [  40]  build
+├── [9.8K]  server
+│   ├── [9.5K]  ServerBase.hx
+│   └── [ 253]  ServerConfig.hx
+├── [ 50K]  template
+│   └── [ 50K]  tag
+│       └── [ 50K]  html
+│           ├── [ 602]  AssetTag.hx
+│           ├── [5.0K]  FormAppObject.hx
+│           ├── [ 974]  FormDef.hx
+│           ├── [1.2K]  FormTag.hx
+│           ├── [2.6K]  HeadTag.hx
+│           ├── [ 618]  HtmlTag.hx
+│           ├── [ 301]  HtmlTagHandler.hx
+│           ├── [ 32K]  field
+│           │   ├── [2.9K]  CheckboxField.hx
+│           │   ├── [2.9K]  ColorField.hx
+│           │   ├── [1.6K]  DateField.hx
+│           │   ├── [8.0K]  FormField.hx
+│           │   ├── [2.0K]  FormFieldTag.hx
+│           │   ├── [ 918]  HiddenField.hx
+│           │   ├── [6.8K]  HtmlFormField.hx
+│           │   ├── [2.8K]  SelectField.hx
+│           │   ├── [1.6K]  TextField.hx
+│           │   ├── [1.8K]  TextareaField.hx
+│           │   └── [ 242]  import.hx
+│           ├── [6.4K]  head
+│           │   └── [6.3K]  ScriptsTag.hx
+│           └── [ 242]  import.hx
+├── [ 46K]  utils
+│   ├── [ 390]  Abstracts.hx
+│   ├── [ 263]  CompilationInfo.hx
+│   ├── [1.0K]  Config.hx
+│   ├── [ 24K]  Macros.hx
+│   ├── [ 17K]  Tree.hx
+│   └── [2.6K]  TreeProgressListener.hx
+├── [4.0K]  view
+│   ├── [1.4K]  AppView.hx
+│   ├── [ 380]  AppViewExtension.hx
+│   ├── [1.9K]  HtmlView.hx
+│   └── [ 136]  import.hx
+└── [9.0K]  widget
+    └── [8.9K]  field
+        ├── [1.7K]  BootstrapSelect.hx
+        ├── [2.0K]  DatepickerField.hx
+        ├── [3.0K]  EvolColorpicker.hx
+        ├── [1.8K]  JqueryWheelColorpicker.hx
+        └── [ 319]  import.hx
+
+ 185K used in 15 directories, 55 files
+ 
+ 
+ 
+common library:
+ .
+├── [8.7K]  Imports.hx
+├── [ 344]  _import.hx
+├── [ 15K]  base
+│   ├── [8.2K]  AppObject.hx
+│   ├── [1.9K]  Base.hx
+│   ├── [ 792]  CallStackUtils.hx
+│   ├── [ 845]  DataTypes.hx
+│   ├── [ 786]  DatePlus.hx
+│   ├── [1016]  Globals.hx
+│   ├── [1.3K]  HException.hx
+│   └── [  49]  import.hx
+├── [1.7K]  context
+│   ├── [ 708]  AbstractContext.hx
+│   ├── [ 767]  AbstractObject.hx
+│   └── [ 298]  AbstractObjectExtension.hx
+├── [ 11K]  ds
+│   ├── [ 10K]  DS.hx
+│   └── [1.3K]  DynamicObject.hx
+├── [ 15K]  event
+│   ├── [ 600]  AbstractThread.hx
+│   ├── [ 231]  DummyMutex.hx
+│   ├── [ 549]  DummyThread.hx
+│   ├── [1.4K]  Event.hx
+│   ├── [7.4K]  EventsChannel.hx
+│   ├── [ 596]  IEventsChannel.hx
+│   ├── [1.1K]  IOEventsChannel.hx
+│   └── [3.4K]  ThreadsManager.hx
+├── [ 31K]  filter
+│   ├── [1.4K]  ColorFilter.hx
+│   ├── [4.5K]  DateFilter.hx
+│   ├── [8.4K]  Filter.hx
+│   ├── [3.2K]  FiltersRegistry.hx
+│   ├── [5.0K]  FloatFilter.hx
+│   ├── [3.2K]  IntFilter.hx
+│   ├── [1.4K]  MiscFilters.hx
+│   ├── [1.4K]  PhoneFilter.hx
+│   ├── [2.9K]  StrFilter.hx
+│   └── [ 115]  import.hx
+├── [ 91K]  hscript
+│   ├── [9.2K]  Bytes.hx
+│   ├── [3.6K]  Expr.hx
+│   ├── [8.2K]  HscriptDataWriter.hx
+│   ├── [7.4K]  HscriptGenerator.hx
+│   ├── [ 20K]  Interp.hx
+│   ├── [7.2K]  Macro.hx
+│   ├── [ 26K]  Parser.hx
+│   ├── [4.9K]  Printer.hx
+│   ├── [3.1K]  Tools.hx
+│   └── [  64]  import.hx
+├── [ 25K]  htemplate
+│   ├── [ 12K]  HTemplate.hx
+│   ├── [4.0K]  HTemplateAssetLoader.hx
+│   ├── [5.0K]  HTemplateParser.hx
+│   ├── [ 403]  HTemplateStructs.hx
+│   ├── [2.0K]  TagHandler.hx
+│   ├── [ 256]  import.hx
+│   └── [1.2K]  tag
+│       └── [1.2K]  FilterTag.hx
+├── [3.7K]  lang
+│   └── [3.7K]  Latvian.hx
+├── [ 13K]  macro
+│   └── [ 13K]  BuildMacros.hx
+├── [ 40K]  sys
+│   ├── [7.4K]  ANSI.hx
+│   ├── [1.0K]  CLICommand.hx
+│   ├── [6.9K]  CLIMainBase.hx
+│   ├── [6.5K]  Exec.hx
+│   ├── [ 12K]  FSUtils.hx
+│   ├── [1.5K]  FileAssetPointer.hx
+│   ├── [1.0K]  FileStat64.hx
+│   ├── [3.4K]  Terminal.hx
+│   └── [ 210]  import.hx
+├── [135K]  utils
+│   ├── [ 477]  ArrayUtils.hx
+│   ├── [1.1K]  AssetPointer.hx
+│   ├── [1.2K]  BytesHelper.hx
+│   ├── [1.4K]  BytesSegmentsList.hx
+│   ├── [1.9K]  CallbackList.hx
+│   ├── [ 600]  ContextsStack.hx
+│   ├── [6.2K]  DateTools2.hx
+│   ├── [ 793]  DefineMacros.hx
+│   ├── [2.1K]  GeomUtils.hx
+│   ├── [3.0K]  HaJson.hx
+│   ├── [ 389]  InputHelper.hx
+│   ├── [2.1K]  Int64Helper.hx
+│   ├── [ 912]  JsHelper.hx
+│   ├── [1.3K]  LineUtils.hx
+│   ├── [ 517]  MathUtils.hx
+│   ├── [1.3K]  OrderedMap.hx
+│   ├── [ 899]  Range.hx
+│   ├── [ 120]  ReflectUtils.hx
+│   ├── [1.5K]  SingletonsRegistry.hx
+│   ├── [3.2K]  StaticsInitializer.hx
+│   ├── [2.0K]  StreamUtils.hx
+│   ├── [ 12K]  StringUtils.hx
+│   ├── [ 606]  StringsRegistry.hx
+│   ├── [4.4K]  TasksQueue.hx
+│   ├── [ 677]  Thread.hx
+│   ├── [ 269]  Trait.hx
+│   ├── [ 589]  TraitsContainer.hx
+│   ├── [ 17K]  Tree.hx
+│   ├── [1.6K]  TypeUtils.hx
+│   ├── [1.7K]  URLParser.hx
+│   ├── [1.5K]  Updater.hx
+│   ├── [ 226]  UtilsMacros.hx
+│   ├── [ 409]  Validate.hx
+│   ├── [ 231]  XmlHelper.hx
+│   ├── [ 42K]  bin
+│   │   ├── [1.9K]  BinaryFormat.hx
+│   │   ├── [ 12K]  BinaryReader.hx
+│   │   ├── [ 17K]  BinaryWriter.hx
+│   │   ├── [1.9K]  BitsBuffer.hx
+│   │   ├── [4.5K]  BufferValuesReader.hx
+│   │   ├── [4.0K]  BufferValuesWriter.hx
+│   │   └── [  66]  import.hx
+│   ├── [  50]  import.hx
+│   └── [ 19K]  markup
+│       ├── [1.8K]  HtmlMarkupNode.hx
+│       ├── [4.8K]  MarkupNode.hx
+│       ├── [ 786]  MarkupNodeSelector.hx
+│       └── [ 11K]  MarkupParser.hx
+└── [ 44K]  view
+    ├── [1.1K]  AppObjectTagHandler.hx
+    ├── [1.2K]  Scope.hx
+    ├── [6.7K]  TextView.hx
+    ├── [ 13K]  TextViewContext.hx
+    ├── [ 314]  TextViewExtension.hx
+    ├── [1.9K]  TextViewLoader.hx
+    ├── [1.2K]  TextViewTagHandler.hx
+    ├── [ 113]  import.hx
+    └── [ 18K]  tag
+        ├── [ 713]  ExecTag.hx
+        ├── [1.7K]  ForTag.hx
+        ├── [1.1K]  HiddenTag.hx
+        ├── [1.7K]  IfTag.hx
+        ├── [ 540]  IncludeTag.hx
+        ├── [1.4K]  InsertTag.hx
+        ├── [6.6K]  MacroTag.hx
+        ├── [ 400]  ScopeTag.hx
+        ├── [1.6K]  SwitchTag.hx
+        ├── [2.6K]  ViewTag.hx
+        └── [ 121]  import.hx
+
+ 435K used in 16 directories, 126 files

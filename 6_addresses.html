@@ -1,0 +1,119 @@
+[include file='../includes/table.html'/]
+
+[exec]
+  var num_cols = 12;
+  var fields = null;
+  
+  resetMacro('rowsPanel');
+[/exec]
+
+[macro name='cellValue']
+  [call macro='cellValBase' _params='{!params!}'] 
+    [if: key == 'street_id']
+      <span>{! exists('streets') && streets.exists(val) ? streets.get(val).name : '' !}</span>
+    [else]  
+      <span>{!val!}</span>
+    [/if]  
+  [/call]
+[/macro]
+
+
+[macro name='listItems']  
+  [call macro='listItemsBase' _params='{!params!}']
+    {! cellVal(item, 'id') !}
+    {! cellVal(item, 'street_id') !}
+    {! cellVal(item, 'house_no') !}
+    {! cellVal(item, 'flat_no') !}
+    {! cellVal(item, 'floor') !}
+    {! cellVal(item, 'doorcode') !}
+    {! cellVal(item, 'notes') !}
+    {! cellVal(item, 'notes_priv') !}
+    {! cellVal(item, 'company') !}
+    
+    {! cellVal(item, 'is_yard', fields.is_yard) !}
+    {! cellVal(item, 'is_private', fields.is_private) !}
+    {! cellVal(item, 'needs_call', fields.needs_call) !}
+  [/call]
+[/macro]   
+            
+
+[macro name='rowsPanel']
+  <div style='width:50%'>
+    [view class='view.clients.ClientsAddressesView' options="{! { where: [['address_id', '{!id!'+'}' ]] } !}"]
+      [include file="addresses_clients.html" /]
+    [/view]  
+  </div>
+[/macro]
+
+
+[call macro='header' ]
+  <div>
+    <h3>{!title!}:</h3>  
+    <button class="btn btn-success add">Jauna adrese &raquo;</button>   
+    <button class="btn btn-warning hide-form" style="display:none">&laquo; Slēpt formu</button>       
+            
+  </div>
+  <div class='r'>    
+    {!@ 
+      var status_container = callMacro("selectStatusContainer", null, true) 
+    !}
+    [view class='view.address.AddAddressView']
+      [include file="../includes/form.html" /]
+
+      {!@ setExternal('fields', fields); !}
+            
+      [call macro='defaultForm' style='display:none' right_bottom_field='{! status_container->noesc !}']
+        {! fld('street_id') !}      
+        {! fld('house_no') !}      
+        {! fld('flat_no') !}      
+        {! fld('floor') !}
+        {! fld('doorcode') !}
+        {! fld('notes') !}
+        {! fld('notes_priv') !}
+        {! fld('company') !}
+        
+        {! fld('is_yard') !}
+        {! fld('is_private') !}
+        {! fld('needs_call') !}
+      [/call]
+    [/view]
+        
+  </div>  
+  
+[/call]
+
+[call macro='contentTable']    
+  [call macro='columnsLabels']
+    <th>{! fLabel(fields.street_id) !}</th>
+    <th>{! fLabel(fields.house_no) !}</th>
+    <th>{! fLabel(fields.flat_no) !}</th>
+    <th>{! fLabel(fields.floor) !}</th>
+    <th>{! fLabel(fields.doorcode) !}</th>
+    <th style='width:150px'>{! fLabel(fields.notes) !}</th>
+    <th style='width:150px'>{! fLabel(fields.notes_priv) !}</th>
+    <th>{! fLabel(fields.company) !}</th>
+    
+    <th>{! fLabel(fields.is_yard) !}</th>
+    <th>{! fLabel(fields.is_private) !}</th>
+    <th>{! fLabel(fields.needs_call) !}</th>
+  [/call]
+  
+  [call macro='columnsDefinitions']
+    {! colField('id', null, { inner_html: '<span>&nbsp;</span>' }) !}
+    {! colField('street_id', fields.street_id) !}
+    {! colField('house_no', fields.house_no) !}
+    {! colField('flat_no', fields.flat_no) !}
+    {! colField('floor', fields.floor) !}
+    {! colField('doorcode', fields.doorcode) !}
+    {! colField('notes', fields.notes) !}
+    {! colField('notes_priv', fields.notes_priv) !}
+    {! colField('company', fields.company) !}
+    
+    {! colField('is_yard', null, { keep_content: true }) !}
+    {! colField('is_private', null, { keep_content: true }) !}
+    {! colField('needs_call', null, { keep_content: true }) !}
+
+  [/call]
+  
+[/call]
+

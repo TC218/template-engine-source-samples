@@ -1,0 +1,75 @@
+[macro name='test2']
+  TEST2 {!@ print('PRINT') !}
+[/macro]
+
+[macro name='test']
+  testmacro... {!params.a!} {!@ print('fdsfdsfsdfsd') !} [call macro='test2'/]<br/>  
+[/macro]
+
+[macro name='formTest']
+  [form]
+    [text _name='field1'/]<br/>
+    [text _name='field2'/]<br/>
+  [/form]
+[/macro]
+
+[macro name='field'][text _name='{!params.name!}'/][/macro]
+
+
+  [macro name='fields']
+    [call macro='field' name='field3'/]<br/>
+    [call macro='field' name='field4'/]<br/>  
+  [/macro]
+
+[macro name='formTest2']
+
+  [form]
+    [call macro='fields'/]
+  [/form]    
+[/macro]
+
+
+[exec]
+  function test(a)
+  {
+    //print('mytest: '+a);
+    callMacro('test', { a: a });
+  }
+  
+  function getId()
+  {
+    log('ctx: ' + contextId());
+    print(contextId());
+  }
+  0;
+[/exec]
+
+[macro name='listItems']
+  list items ... {!params.items.get(1)!}<br/>  
+  [call macro='test' a='123'/]
+  {!@ test(456);   !}
+  ctx: {! contextId() !}<br/>
+  {!@ log('ctx: ' + contextId()); !}
+  {!@ getId() !}<br/>
+  {!@ print('XXfdsfdsfsdfsd') !}
+[/macro]
+
+<div class="header">    
+  <h3>Pievienot picu:</h3>
+{!@ getId() !}
+</div>
+
+<div class="content">
+  <div class="section1 right">
+    <button class="btn btn-warning btn-xs" id="back-to-list">Picu saraksts &raquo;</button>
+  </div>     
+      
+  [call macro='test' a='def'/]
+  
+  <div id='items-container'>    
+  </div>
+  
+  [call macro='formTest'/]
+  [call macro='formTest2'/]
+    
+</div>

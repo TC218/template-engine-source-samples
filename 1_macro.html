@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+	<meta charset="utf-8">
+	
+	<title>UI Editor</title>
+	
+	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+
+  <link rel="icon" href="data:;base64,iVBORw0KGgo="> <!-- empty favicon -->	
+  
+  <link rel="stylesheet" type="text/css" href="css/reset.css">    
+  <link rel="stylesheet" type="text/css" href="css/main.css">    
+	
+	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+  
+  <link rel="stylesheet" type="text/css" href="js/webix/webix.css">      
+	<script type="text/javascript" src="js/webix/webix.js"></script>
+  
+	<script type="text/javascript" src="js/snap.svg-min.js"></script>
+  
+	<script type="text/javascript" src="js/client.js"></script>
+
+  <script> var objects = {! json(objects) !}; </script>
+  
+</head>
+<body>
+  
+
+  {!ab = 3!}  
+  
+  [macro name="mymacro"]    
+    [macro name="mymacro2"]MYMACRO {!params.test!} 2!!![/macro]
+    [macro name="mymacro3"]
+      [macro name="mymacro4"]MYMACRO {!params.test!} 4444 [/macro]
+      MYMACRO 3!!!
+      [call macro="mymacro4" test="ab2"/]
+    [/macro] 
+  
+    my macro {!params.test!} content! {!ab!}
+    
+    
+      [call macro="mymacro2" test="ab1"/]
+      [call macro="mymacro2" test="ab2"/]
+      [call macro="mymacro3" test="ab2"/]
+      [call macro="mymacro4" test="ab2"/]
+    
+  [/macro]
+
+  [call macro="mymacro2" test="ab"/]
+    
+  [call macro="mymacro" test="ab"/]
+
+  [call macro="mymacro2" test="ab"/]
+  [call macro="mymacro4" test="ab2"/]
+  
+</body>
+</html>

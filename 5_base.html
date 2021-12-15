@@ -1,0 +1,110 @@
+[exec]
+
+  function fLabel(field) return field.label;
+  
+  function fShortLabel(field) return field.short_label != null ? field.short_label : field.label;
+
+[/exec]
+
+
+[macro name='inner']
+  {!_call_inner!}
+[/macro]
+
+[macro name='navbar']
+  [view class='view.base.NavbarView']
+    <nav class="navbar navbar-default" id="main-nav">
+      <div class="container-fluid">
+        
+        <div class="collapse navbar-collapse"> 
+          <ul class="nav navbar-nav">
+            <li data-view="orders.OrdersView"><a href="#">Pasūtījumi</a></li>
+            
+            <li data-view="items.ItemsView" class="separator-left"><a href="#">Sortiments</a></li>
+            <li data-view="categories.ItemsCategoriesView"><a href="#">Kategorijas</a></li>
+            <li data-view="PizzasView"><a href="#">Picas</a></li>
+                        
+            <li data-view="address.AddressesView" class="separator-left"><a href="#">Adreses</a></li>
+            <li data-view="BranchesView"><a href="#">Filiāles</a></li>
+            <li data-view="address.StreetsView"><a href="#">Ielas</a></li>
+            <li data-view="address.RegionsView"><a href="#">Rajoni</a></li>
+                    
+            <li data-view="clients.ClientsView" class="separator-left"><a href="#">Klienti</a></li>
+            <li data-view="CouponsView"><a href="#">Kuponi</a></li>
+            <li data-view="BadNumbersView"><a href="#">Numuru piezīmes</a></li>
+                    
+            <li data-view="DriversView" class="separator-left"><a href="#">Braucēji</a></li>
+                    
+          </ul>
+                
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pārējais <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li data-view="LanguagesView"><a href="#">Valodas</a></li>
+                
+                <li role="separator" class="divider"></li>
+                <li data-view="system.UsersView"><a href="#">Lietotāji</a></li>
+                <li data-view="system.LogView"><a href="#">Darbību logs</a></li>
+                
+                <li role="separator" class="divider"></li>
+                <li data-view="AppHelpView"><a href="#">Aplikācijas lietošana</a></li>
+              </ul>
+            </li>
+          </ul>
+                
+        </div>
+      </div>
+    </nav>
+  [/view]
+[/macro]
+
+[macro name='popoverFormFieldError']
+  [for: e in params.errors]
+    <div>{!e!}</div>
+  [/for]
+[/macro]
+
+[macro name='helpPopover']
+  [if: params.title]<strong>{!params.title!}</strong>[/if]
+  {!content!}
+[/macro]
+
+
+[macro name='page']
+  [call macro='navbar'/]
+
+  {!_call_inner!}
+  
+  <table class="scopes"></table>  
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="msg-modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          <p>One fine body&hellip;</p>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-close" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>        
+      
+        <div class="modal-footer delete">
+          <button type="button" class="btn btn-default btn-close" data-dismiss="modal">Atcelt</button>
+          <button type="button" class="btn btn-danger btn-delete">Tomēr dzēst</button>
+        </div>
+
+        <div class="modal-footer error">
+          <button type="button" class="btn btn-default btn-close" data-dismiss="modal">Aizvērt</button>
+        </div>
+        
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->  
+  
+[/macro]
