@@ -1,0 +1,40 @@
+package rflib.common.view;
+
+@:build(rflib.common.macro.BuildMacros.buildClass()) @:autoBuild(rflib.common.macro.BuildMacros.buildClass()) @:allow(rflib.common.view.TextViewContext) @:gen_ids(EventId,LOAD) extern class TextView extends rflib.common.base.AppObject {
+	private var _context : rflib.common.TextViewContext;
+	private var _htemplate : rflib.common.HTemplate;
+	private var _options : Dynamic;
+	private var asset : rflib.common.AssetPointer;
+	var context(get,set) : rflib.common.TextViewContext;
+	var htemplate(get,set) : rflib.common.HTemplate;
+	var options(get,set) : Dynamic;
+	var scope : rflib.common.Scope;
+	function new() : Void;
+	function callMacro(name : String, ?params : Dynamic, ?return_vars : Array<String>) : Dynamic;
+	function exec() : TextView;
+	function getMacros() : Dynamic;
+	function getTagHandlersMap() : Map<String,Class<rflib.common.TagHandler>>;
+	function getVars() : Dynamic;
+	@:pure(inferredPure) function get_context() : rflib.common.TextViewContext;
+	@:pure(inferredPure) private function get_htemplate() : rflib.common.HTemplate;
+	@:pure(inferredPure) private function get_options() : Dynamic;
+	function initView(?ctx : rflib.common.TextViewContext, force_parse : Null<Bool> = false) : Void;
+	function loadFromAsset(asset : rflib.common.AssetPointer) : Void;
+	function loadNodes(nodes : Array<rflib.common.MarkupNode>) : rflib.common.HTemplate;
+	function macroExists(name : String) : Bool;
+	function onLoad() : TextView;
+	function output(?vars : Dynamic) : String;
+	function parseFromString(s : rflib.common.Str) : TextView;
+	private function set_context(val : rflib.common.TextViewContext) : rflib.common.TextViewContext;
+	private function set_htemplate(val : rflib.common.HTemplate) : rflib.common.HTemplate;
+	private function set_options(v : Dynamic) : Unknown;
+	function tempContext(c : rflib.common.TextViewContext, cb : () -> Void) : Void;
+	function traverseViews(cb : TextView -> Bool) : Bool;
+	function viewContext(cb : () -> Void) : Void;
+	static var LOAD(inline,never) : rflib.common.EventId;
+	private static var MACRO_VAR_PREFIX(inline,never) : String;
+	private static var parser : rflib.common.HTemplateParser;
+	static function getDefaultTagHandlersMap() : Map<String,Class<rflib.common.TagHandler>>;
+	static function getTreeObjectView(obj : rflib.common.TreeObject) : TextView;
+	static function parseAndOutput(s : rflib.common.Str, ?vars : Dynamic) : String;
+}

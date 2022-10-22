@@ -1,0 +1,47 @@
+package rflib.common.sys;
+
+extern class CLIMainBase {
+	var args : Array<String>;
+	var args_str : String;
+	var cmd_values : Map<String,String>;
+	var cmd_values_pos : Map<String,Int>;
+	var commands : Array<rflib.common.CLICommand>;
+	var commands_map : Map<String,rflib.common.CLICommand>;
+	private var default_cmd(get,never) : rflib.common.CLICommand;
+	var env : Map<String,String>;
+	private var use_commands : Bool;
+	function new() : Void;
+	private function addCommands(cmds : Array<rflib.common.CLICommand>) : Void;
+	private function execCommand() : Void;
+	private function get_default_cmd() : rflib.common.CLICommand;
+	private function init() : Void;
+	private function parseCommandLine() : Void;
+	private function parseSwitch(s : String) : Bool;
+	private function reqEnv(name : String) : Void;
+	static var ERROR_COLOR(inline,never) : Int;
+	static var SUCCESS_COLOR(inline,never) : Int;
+	static var WARN_COLOR(inline,never) : Int;
+	static var atexit_callbacks : rflib.common.CallbackList<() -> Void>;
+	private static var hscr_writer : rflib.common.HScriptDataWriter;
+	static var stderr : rflib.common.Output;
+	static var stdin : rflib.common.Input;
+	static var stdout : rflib.common.Output;
+	static var tty : rflib.common.Output;
+	static function P(s : Dynamic) : Void;
+	static function atexit(f : () -> Void, ?args : Array<Dynamic>) : rflib.common.FunctionArgs<() -> Void>;
+	static function exit(code : Int, ?message : rflib.common.Str) : Void;
+	static function exitWithError(s : Dynamic, code : Null<Int> = 0) : Void;
+	private static function initBase() : Void;
+	private static function itemToString(b : StringBuf, s : haxe.StackItem) : Void;
+	static function log(s : Dynamic) : Void;
+	static function logData(v : Dynamic) : Void;
+	static function logError(v : Dynamic) : Void;
+	static function logSuccess(v : Dynamic) : Void;
+	static function lognl(s : Dynamic) : Void;
+	static function print(s : Dynamic) : Void;
+	static function println(s : Dynamic) : Void;
+	static function programDir() : String;
+	static function programName() : String;
+	static function stackToString(stack : Array<haxe.StackItem>) : String;
+	static function warn(s : Dynamic, ?prefix : String) : Void;
+}

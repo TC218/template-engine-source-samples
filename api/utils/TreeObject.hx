@@ -1,0 +1,40 @@
+package rflib.common.utils;
+
+@:allow(rflib.common.utils.Tree) @:allow(rflib.common.utils.ObjectEvent) extern class TreeObject {
+	private var _id : Int;
+	private var _name : String;
+	var children : Map<Int,TreeObject>;
+	var id(get,set) : Int;
+	var listeners : Map<rflib.common.EventId,Array<Listener>>;
+	private var listeners_multi_priorities : Bool;
+	var name(get,set) : String;
+	var named_children : Map<String,TreeObject>;
+	private var on_parent_cbs : rflib.common.VoidCallbackList;
+	var parent : TreeObject;
+	var tree : Tree;
+	function new() : Void;
+	function addChild<T>(ch : T) : T;
+	function addListener(listener : Listener) : Listener;
+	function context(cb : () -> Void) : Void;
+	function findOne(query : String) : TreeObject;
+	function getNamedPath() : Array<Dynamic>;
+	function getPath() : Map<Int,TreeObject>;
+	function getPathIds() : Array<Int>;
+	function getRouteTo(target : TreeObject) : ObjectRoute;
+	@:pure(inferredPure) function get_id() : Int;
+	@:pure(inferredPure) function get_name() : String;
+	private function init() : Void;
+	private function initNamedChildren() : Void;
+	function listen(event_type_id : rflib.common.EventId, listen_cb : ObjEvent -> Listener -> Void, source : Null<Int> = 0, phase : Null<Int> = 0, filter_cb : Null<ObjectEvent -> Bool> = null, priority : Null<Int> = 0) : Listener;
+	private function onParent() : Void;
+	function onParentCb(cb : rflib.common.VoidCallback) : Void;
+	function onReceiveFromOutside(event_type_id : rflib.common.EventId, listen_cb : ObjEvent -> Listener -> Void) : Void;
+	function onReceiveFromSelf(event_type_id : rflib.common.EventId, listen_cb : ObjEvent -> Listener -> Void) : Void;
+	function removeChild<T>(ch : T) : Void;
+	function removeListener(listener : Listener) : Int;
+	function setName(s : String) : TreeObject;
+	function set_id(val : Int) : Int;
+	function set_name(s : String) : String;
+	private static var stack : Array<TreeObject>;
+	@:pure(inferredPure) static function getContextItem() : TreeObject;
+}

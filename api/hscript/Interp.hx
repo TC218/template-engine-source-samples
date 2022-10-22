@@ -1,0 +1,42 @@
+package rflib.common.hscript;
+
+extern class Interp {
+	private var binops : Map<String,Expr -> Expr -> Dynamic>;
+	var context : InterpContext;
+	private var curExpr : Expr;
+	private var declared : Array<{old : {r : Dynamic}, n : String}>;
+	private var depth : Int;
+	private var inTry : Bool;
+	var locals : Map<String,{r : Dynamic}>;
+	private var objects : Array<Dynamic>;
+	private var variables : Map<String,Dynamic>;
+	function new() : Void;
+	private function assign(e1 : Expr, e2 : Expr) : Dynamic;
+	private function assignOp(op : String, fop : Dynamic -> Dynamic -> Dynamic) : Void;
+	private function call(o : Dynamic, f : Dynamic, args : Array<Dynamic>) : Dynamic;
+	private function cnew(cl : String, args : Array<Dynamic>) : Dynamic;
+	private function doWhileLoop(econd : Expr, e : Expr) : Void;
+	private function duplicate<T>(h : Map<String,T>) : haxe.ds.Map<String,Null<T>>;
+	@:pure(inferredPure) private function edef(e : Expr) : ExprDef;
+	private function error(e : ErrorDef) : Dynamic;
+	private function evalAssignOp(op : String, fop : Dynamic -> Dynamic -> Unknown, e1 : Expr, e2 : Expr) : Dynamic;
+	function execute(expr : Expr) : Dynamic;
+	function expr(e : Expr) : Dynamic;
+	private function exprReturn(e : Expr) : Dynamic;
+	private function fcall(o : Dynamic, f : String, args : Array<Dynamic>) : Dynamic;
+	private function forLoop(n : String, it : Expr, e : Expr) : Void;
+	private function get(o : Dynamic, f : String) : Dynamic;
+	function getDefaultContextVariables() : Map<String,Dynamic>;
+	private function getMapValue(map : Dynamic, key : Dynamic) : Dynamic;
+	private function increment(e : Expr, prefix : Bool, delta : Int) : Dynamic;
+	private function initOps() : Void;
+	@:pure(inferredPure) private function isMap(o : Dynamic) : Bool;
+	private function makeIterator(v : Dynamic) : Iterator<Dynamic>;
+	private function resolve(id : String) : Dynamic;
+	private function restore(old : Int) : Void;
+	private function set(o : Dynamic, f : String, v : Dynamic) : Dynamic;
+	@:keep function setLocal(n : rflib.common.Str, v : Dynamic) : Void;
+	private function setMapValue(map : Dynamic, key : Dynamic, value : Dynamic) : Void;
+	private function whileLoop(econd : Expr, e : Expr) : Void;
+	static function parseAndInterpret(script : String, ?vars : rflib.common.DynMap, ?origin : String) : Unknown;
+}
